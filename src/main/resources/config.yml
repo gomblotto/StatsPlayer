@@ -1,0 +1,34 @@
+auto-respawn: true
+update-top-sec: 10
+gui-name: "&7Top Kills Gui - "
+name-item-gui: "&cPlayer Name &8&l> &e&l%player_name%"
+lines-gui:
+  - "&7&m----------------"
+  - "&7Deaths : &e%player_deaths%"
+  - "&7K/D : &e%player_kd%"
+  - "&7Actual KS : &e%player_actual_ks%"
+  - "&7Max KS : &e%player_max_ks%"
+  - "&7Position : &e%player_top_position%"
+  - "&7&m----------------"
+
+#This is the section to give rewards every time the player reaches the required killstreak
+#Example the player reaches 5 kills the plugin executes the rewards
+
+on-killstreak:
+  5:
+    add-effects:
+      - INCREASE_DAMAGE:1:50
+      - REGENERATION:4:50
+  7:
+    commands:
+      - give %player% diamond 1
+
+#This is the section to give rewards every time the player do a tot kills
+#Example the player every time do 3 kills the plugin executes the rewards
+every-each-totkill:
+  3:
+    commands:
+      - give %player% emerald 1
+    add-effects:
+      - INCREASE_DAMAGE:1:50
+      - REGENERATION:4:50      
