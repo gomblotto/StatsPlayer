@@ -24,6 +24,7 @@ public class StatsCommand extends AbstractCommand {
             if (p.hasPermission("statsplayer.stats")) {
                 if (args[0].equalsIgnoreCase("gui")) {
                     StatsCore.getInstance().getTopManager().getTopKillsGui().openInventory(p);
+                    return;
                 }
             }
 
@@ -32,8 +33,10 @@ public class StatsCommand extends AbstractCommand {
                     StatsCore.getInstance().getConfigManager().reloadConfig();
                     StatsCore.getInstance().reloadConfig();
                     p.sendMessage("§aReloaded configs!");
+                    return;
                 }
             }
+            p.sendMessage("§cInvalid argument");
 
         }
     }

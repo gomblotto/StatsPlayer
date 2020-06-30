@@ -1,0 +1,6 @@
+name: StatsPlayer
+main: net.gomblotto.StatsCore
+version: 1.0.0
+commands:
+  statsplayer:
+    description: Use for view Player Stats

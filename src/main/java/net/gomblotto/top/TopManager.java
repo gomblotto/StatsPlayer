@@ -7,9 +7,9 @@ public class TopManager {
     @Getter private final TopKillsGui topKillsGui;
     @Getter private final TopKillsCalc topKillsCalc;
     public TopManager(){
-        this.topKillsGui = new TopKillsGui();
         topKillsCalc = new TopKillsCalc();
-        topKillsCalc.runTaskTimerAsynchronously(StatsCore.getInstance(), 1L,  StatsCore.getInstance().getConfig().getInt("update-top-sec")*20L);
+        topKillsCalc.runTaskTimerAsynchronously(StatsCore.getInstance(), 0L,  StatsCore.getInstance().getConfig().getInt("update-top-sec")*20L);
+        this.topKillsGui = new TopKillsGui();
 
     }
 }

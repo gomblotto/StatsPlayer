@@ -15,12 +15,10 @@ import java.util.Objects;
 
 public class StatsPlayerManager {
     @Getter private final List<StatsPlayer> statsPlayers = new ArrayList<>();
-    @Getter private final int minConsecutiveKills;
     @Getter private final boolean autoRespawn;
     @Getter private final List<StatsPlayer> topPlayers = new ArrayList<>();
 
     public StatsPlayerManager(){
-        this.minConsecutiveKills = StatsCore.getInstance().getConfig().getInt("minium-kills-for-killstreak");
         this.autoRespawn = StatsCore.getInstance().getConfig().getBoolean("auto-respawn");
     }
 
@@ -50,7 +48,7 @@ public class StatsPlayerManager {
                     int kills = Integer.parseInt(string);
                     if ((statsPlayer.getConsecutiveKills() % kills) == 0) {
                         desarializeSection(statsPlayer, everyks, string);
-                        Bukkit.getOnlinePlayers().forEach(i -> i.sendMessage(MessageUtils.color(StatsCore.getInstance().getConfigManager().getMessagesConfig().getYamlConfiguration().getString("killstreak_message").replace("%killer_name%", statsPlayer.getName()).replace("%player_actual_ks%", String.valueOf(statsPlayer.getConsecutiveKills())))));
+                        Bukkit.getOnlinePlayers().forEach(i -> i.sendMessage(MessageUtils.color(StatsCore.getInstance().getConfigManager().getMessagesConfig().getYamlConfiguration().getString("killstreak_message").replace("%killer_name%",  Bukkit.getPlayer(statsPlayer.getUuid()).getName()).replace("%player_actual_ks%", String.valueOf(statsPlayer.getConsecutiveKills())))));
                     }
                 }
             }
@@ -62,11 +60,11 @@ public class StatsPlayerManager {
     private void desarializeSection(StatsPlayer player, ConfigurationSection section, String string){
         for(String s : section.getConfigurationSection(string).getStringList("add-effects")) {
             String[] strings = s.split(":");
-            Bukkit.getPlayer(player.getName()).removePotionEffect(PotionEffectType.getByName(strings[0]));
-            Bukkit.getPlayer(player.getName()).addPotionEffect(new PotionEffect(Objects.requireNonNull(PotionEffectType.getByName(strings[0])), Integer.parseInt(strings[2]) * 20, (Integer.parseInt(strings[1]) - 1)));
+            Bukkit.getPlayer(player.getUuid()).removePotionEffect(PotionEffectType.getByName(strings[0]));
+            Bukkit.getPlayer(player.getUuid()).addPotionEffect(new PotionEffect(Objects.requireNonNull(PotionEffectType.getByName(strings[0])), Integer.parseInt(strings[2]) * 20, (Integer.parseInt(strings[1]) - 1)));
         }
         for(String s : section.getConfigurationSection(string).getStringList("commands")){
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), s.replace("%player%", player.getName()));
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), s.replace("%player%", Bukkit.getPlayer(player.getUuid()).getName()));
         }
     }
 }

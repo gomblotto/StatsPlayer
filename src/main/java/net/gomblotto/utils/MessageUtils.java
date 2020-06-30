@@ -1,6 +1,7 @@
 package net.gomblotto.utils;
 
 import net.gomblotto.players.StatsPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -16,13 +17,13 @@ public class MessageUtils {
 
 
     public static String replacer(StatsPlayer p, String s){
-        return s.replace("%player_name%", p.getName())
+        return s.replace("%player_name%", Bukkit.getOfflinePlayer(p.getUuid()).getName())
         .replace("%player_kills%", String.valueOf(p.getKills()))
         .replace("%player_deaths%" , String.valueOf(p.getDeaths()))
         .replace("%player_actual_ks%" , String.valueOf(p.getConsecutiveKills()))
         .replace("%player_max_ks%", String.valueOf(p.getMaxKS()))
         .replace("%player_top_position%", String.valueOf(p.getTopPosition()))
-        .replace("%player_kd%", String.valueOf(p.getKd()));
+        .replace("%player_kd%", String.valueOf((double) p.getKills() /p.getDeaths()));
     }
     public static String color(String s) {
         return ChatColor.translateAlternateColorCodes('&', s);

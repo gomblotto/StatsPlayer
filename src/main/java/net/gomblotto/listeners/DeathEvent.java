@@ -21,8 +21,8 @@ public class DeathEvent implements Listener {
                 victim.setConsecutiveKills(0);
                 killer.setConsecutiveKills(killer.getConsecutiveKills() + 1);
                 if (killer.getConsecutiveKills() > killer.getMaxKS()) killer.setMaxKS(killer.getConsecutiveKills());
-                if(StatsCore.getInstance().getStatsPlayerManager().isAutoRespawn()) Bukkit.getPlayer(victim.getName()).spigot().respawn();
-                e.setDeathMessage(MessageUtils.color(StatsCore.getInstance().getConfigManager().getMessagesConfig().getYamlConfiguration().getString("death_message").replace("%killer_name%", killer.getName()).replace("%death_name%", victim.getName())));
+                if(StatsCore.getInstance().getStatsPlayerManager().isAutoRespawn()) Bukkit.getPlayer(victim.getUuid()).spigot().respawn();
+                e.setDeathMessage(MessageUtils.color(StatsCore.getInstance().getConfigManager().getMessagesConfig().getYamlConfiguration().getString("death_message").replace("%killer_name%", Bukkit.getPlayer(killer.getUuid()).getName()).replace("%death_name%",  Bukkit.getPlayer(victim.getUuid()).getName())));
                 StatsCore.getInstance().getStatsPlayerManager().activeEffectKS(killer);
             }
         }

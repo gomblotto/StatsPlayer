@@ -2,17 +2,19 @@ package net.gomblotto.database;
 
 import net.gomblotto.StatsCore;
 import net.gomblotto.players.StatsPlayer;
+import org.bukkit.Bukkit;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class PlayerData  extends SQLite{
     public PlayerData(String path) throws ClassNotFoundException {
         super(path);
     }
     public void createNewTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS Stats (name varchar(25) PRIMARY KEY, kills integer, deaths integer, ks integer);";
+        String sql = "CREATE TABLE IF NOT EXISTS Stats (UUID varchar(30) PRIMARY KEY, kills integer, deaths integer, ks integer);";
         try (PreparedStatement stmt = this.getConnection().prepareStatement(sql)) {
             stmt.execute();
         } catch (SQLException throwables) {
@@ -43,7 +45,8 @@ public class PlayerData  extends SQLite{
     }
 
     private void update(String player, String data, int value) {
-        try (PreparedStatement insert = this.getConnection().prepareStatement("UPDATE Stats SET "+data+"=? WHERE name=?")) {
+        try (PreparedStatement insert = this.getConnection().prepareStatement("UPDATE Stats SET "+data+"=? WHERE UUID=?")) {
+
             insert.setString(2, player);
             insert.setInt(1, value);
             insert.executeUpdate();
@@ -53,17 +56,17 @@ public class PlayerData  extends SQLite{
     }
 
     public void saveAll(String player, int kills, int deaths,int ks) {
-            if(hasAccount(player)) {
-                update(player, "kills", kills);
-                update(player, "deaths", deaths);
-                update(player, "ks", ks);
-            }else{
-                insert(player, kills,deaths,ks);
-            }
-    }
+                    if (hasAccount(player)) {
+                        update(player, "kills", kills);
+                        update(player, "deaths", deaths);
+                        update(player, "ks", ks);
+                    } else {
+                        insert(player, kills, deaths, ks);
+                    }
+                }
 
     private boolean hasAccount(String player) {
-        try (PreparedStatement select = this.getConnection().prepareStatement("SELECT * FROM Stats WHERE name=?")) {
+        try (PreparedStatement select = this.getConnection().prepareStatement("SELECT * FROM Stats WHERE UUID=?")) {
             select.setString(1, player);
             ResultSet result = select.executeQuery();
             boolean exists = result.next();
@@ -79,7 +82,7 @@ public class PlayerData  extends SQLite{
         try (PreparedStatement insert = this.getConnection().prepareStatement("SELECT * FROM Stats")) {
         ResultSet resultSet = insert.executeQuery();
         while (resultSet.next()){
-            StatsPlayer player = new StatsPlayer(resultSet.getString("name"));
+            StatsPlayer player = new StatsPlayer(UUID.fromString(resultSet.getString("UUID")), false);
             player.setKills(resultSet.getInt("kills"));
             player.setDeaths(resultSet.getInt("deaths"));
             player.setMaxKS(resultSet.getInt("ks"));

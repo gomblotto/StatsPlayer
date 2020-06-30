@@ -7,11 +7,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.UUID;
+
 public class JoinEvent  implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
-        if(StatsPlayerUtil.getStatsPlayer(e.getPlayer()) == null)
-        StatsCore.getInstance().getStatsPlayerManager().addStatsPlayer(new StatsPlayer(e.getPlayer().getName()));
+        if(StatsPlayerUtil.getStatsPlayer(e.getPlayer()) == null){
+            StatsCore.getInstance().getStatsPlayerManager().addStatsPlayer(new StatsPlayer(e.getPlayer().getUniqueId(), true));
+        }else{
+            StatsPlayerUtil.getStatsPlayer(e.getPlayer()).setLogged(true);
+        }
     }
 }

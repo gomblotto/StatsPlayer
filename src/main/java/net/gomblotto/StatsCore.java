@@ -10,15 +10,19 @@ import net.gomblotto.database.PlayerData;
 import net.gomblotto.listeners.InventoryListener;
 import net.gomblotto.listeners.DeathEvent;
 import net.gomblotto.listeners.JoinEvent;
+import net.gomblotto.players.StatsPlayer;
 import net.gomblotto.players.StatsPlayerManager;
 import net.gomblotto.top.TopManager;
 import net.gomblotto.utils.StatsPlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SimpleTimeZone;
+import java.util.stream.Collectors;
 
 public class StatsCore extends JavaPlugin {
     @Getter private static StatsCore instance;
@@ -27,7 +31,7 @@ public class StatsCore extends JavaPlugin {
     @Getter private StatsPlayerManager statsPlayerManager;
     @Getter private TopManager topManager;
     @Setter private int task;
-
+    @Setter @Getter private boolean isSaving;
     @Override
     public void onEnable() {
         instance = this;
@@ -39,15 +43,27 @@ public class StatsCore extends JavaPlugin {
         new StatsCommand().register();
         topManager = new TopManager();
         setTask(new AutoSave().runTaskTimerAsynchronously(this, 20L*60L, 20L*60L).getTaskId());
+
     }
 
 
     @Override
     public void onDisable() {
         Bukkit.getScheduler().cancelTask(task);
-        StatsPlayerUtil.saveData();
+
+        for(StatsPlayer statsPlayer : statsPlayerManager.getStatsPlayers()) {
+            if(statsPlayer.isLogged()) {
+                playerData.saveAll(statsPlayer.getUuid().toString(), statsPlayer.getKills(), statsPlayer.getDeaths(), statsPlayer.getMaxKS());
+                getLogger().info("Saving the UUID ".concat(statsPlayer.getUuid().toString()));
+            }
+
+            }
+
         playerData.closeConnection();
+
     }
+
+
 
 
 

@@ -1,9 +1,10 @@
 auto-respawn: true
-update-top-sec: 10
+update-top-sec: 600
 gui-name: "&7Top Kills Gui - "
 name-item-gui: "&cPlayer Name &8&l> &e&l%player_name%"
 lines-gui:
   - "&7&m----------------"
+  - "&7Kills : &7%player_kills%"
   - "&7Deaths : &e%player_deaths%"
   - "&7K/D : &e%player_kd%"
   - "&7Actual KS : &e%player_actual_ks%"

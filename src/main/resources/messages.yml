@@ -13,3 +13,4 @@ killstreak_message: "&c%killer_name% &7is has a killstreak  &e%player_actual_ks%
 min_page_reached: "&cMinium Page reached"
 max_page_reached: "&cMax Page reached"
 no_perm: "§cInsufficient Permissions."
+loading_top: "&cLoading the top..."

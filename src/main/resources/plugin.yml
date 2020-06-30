@@ -1,4 +1,4 @@
-name: StatsCore
+name: StatsPlayer
 main: net.gomblotto.StatsCore
 version: 1.0.0
 commands:
